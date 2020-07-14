@@ -7,6 +7,14 @@ settings:
   session:
     cookie:
       sameSite: lax
-
+  disk:
+    driver: 'local'
+    local:
+      directory: 'uploaded'
+icq:
+  uri: https://api.icq.net/bot/v1
+  token: 001.4039253446.2905774098:754618342
+  botId: 754618342
+  chatId: @quanna.dev
 mongodb:
-  uri: mongodb://localhost:27017/media-server-ICQ
+  uri: mongodb+srv://mediaservericq:24EcHAYkvsDn0yhb@cluster0-zikxw.mongodb.net/media-server?retryWrites=true&w=majority

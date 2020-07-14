@@ -5,21 +5,23 @@ import * as http from 'http';
 
 // 3p
 import { Config, createApp } from '@foal/core';
-import { connect } from 'mongoose';
+
 
 // App
 import { AppController } from './app/app.controller';
+import {
+  Database,
+  LoggerService
+} from './app/services';
 
 async function main() {
-  const uri = Config.getOrThrow('mongodb.uri', 'string');
-  connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
-
+  const logger = new LoggerService();
   const app = createApp(AppController);
-
+  await Database.init();
   const httpServer = http.createServer(app);
   const port = Config.get2('port', 'number', 3001);
   httpServer.listen(port, () => {
-    console.log(`Listening on port ${port}...`);
+    logger.info_init(`Listening on port ${port}...`);
   });
 }
 

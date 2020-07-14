@@ -7,7 +7,7 @@
     "build:app:w": "tsc -p tsconfig.app.json -w",
     "start": "node ./build/index.js",
     "start:w": "supervisor -w ./build --no-restart-on error ./build/index.js",
-    "develop": "npm run build:app && concurrently \"npm run build:app:w\" \"npm run start:w\"",
+    "dev": "npm run build:app && concurrently \"npm run build:app:w\" \"npm run start:w\"",
     "build:test": "foal rmdir build && copy-cli \"src/**/*.html\" build && tsc -p tsconfig.test.json",
     "build:test:w": "tsc -p tsconfig.test.json -w",
     "start:test": "mocha --file \"./build/test.js\" \"./build/**/*.spec.js\"",
@@ -29,21 +29,27 @@
   "dependencies": {
     "@foal/core": "^1.0.0",
     "@foal/mongoose": "^1.0.0",
+    "@foal/storage": "^1.9.0",
+    "@types/winston": "^2.4.4",
+    "form-data": "^3.0.0",
     "mongoose": "^5.4.9",
+    "node-fetch": "^2.6.0",
     "source-map-support": "^0.5.1",
+    "winston": "^3.3.3",
+    "wretch": "^1.7.2",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.1",
     "@types/node": "^8.0.47",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
     "concurrently": "^3.5.1",
     "copy": "^0.3.2",
+    "eslint": "^6.7.0",
     "mocha": "^5.2.0",
     "supertest": "^3.3.0",
     "supervisor": "^0.12.0",
-    "eslint": "^6.7.0",
-    "@typescript-eslint/eslint-plugin": "^2.7.0",
-    "@typescript-eslint/parser": "^2.7.0",
     "typescript": "~3.5.3"
   }
 }

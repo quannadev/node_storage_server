@@ -28,6 +28,7 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/quotes': ['error', 'single'],
     'arrow-parens': ['error', 'as-needed'],
     'max-classes-per-file': 'off',
