@@ -27,14 +27,14 @@ export interface ICQErrorResponse {
 export class ICQ {
     private client: Wretcher;
     private logger: LoggerService;
-    private token: string = Config.get<string>('icq.token');
-    private chatId: string = Config.get<string>('icq.chatId');
+    private token: string = process.env.ICQ_TOKEN || Config.get<string>('icq.token');
+    private chatId: string = process.env.ICQ_CHATID || Config.get<string>('icq.chatId');
     private user: IUser;
 
     constructor(user: IUser) {
         this.user = user;
         this.logger = new LoggerService();
-        const uri = Config.get<string>('icq.uri');
+        const uri = process.env.ICQ_API || Config.get<string>('icq.uri');
         this.client = wretch(uri, {})
             .query({
                 token : this.token,

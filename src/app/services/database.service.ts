@@ -10,7 +10,7 @@ export class Database {
         this.onConnect();
     }
     onConnect() {
-        const uri = Config.getOrThrow('mongodb.uri', 'string');
+        const uri = process.env.MONGODB || Config.get('mongodb.uri');
         connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false });
         this.logger.info_init('Database connected!!!')
     }
