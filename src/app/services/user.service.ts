@@ -1,5 +1,5 @@
 import {IUser, Roles, User} from '../models/user.model';
-import {IFileUpload} from '../models/file-upload.model';
+import {FileUpload, IFileUpload} from '../models/file-upload.model';
 import {APIResponse, Utils} from '../models/constans.model';
 import {decode} from 'jsonwebtoken';
 import {verifyPassword} from '@foal/core';
@@ -67,6 +67,22 @@ export class UserService {
             return user.files;
         }
         return []
+    }
+
+    async getMe(id: string) {
+        const files = await FileUpload.find({
+            owner: id,
+        })
+        if (files.length > 0){
+            const fileSize = files.reduce((a,b) => {
+                return a + b.size
+            }, 0);
+            const total_size = Utils.bytesToSize(fileSize);
+            return {
+                files: files.length,
+                size: total_size
+            }
+        }
     }
 
     async decodeToken(token: string): Promise<IUser | undefined> {

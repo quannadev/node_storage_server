@@ -55,7 +55,11 @@ export class ApiController {
 
     @Get('/me')
     async getMe(ctx: Context) {
-        return new HttpResponseOK(ctx.user)
+        const metrics = await new UserService().getMe(ctx.user._id);
+        return new HttpResponseOK({
+            user: ctx.user,
+            metrics
+        })
     }
 
     @Get('/me/files')
