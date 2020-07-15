@@ -7,8 +7,9 @@ import {
 } from '@foal/core';
 import {ICQ, UserService} from '../services';
 import {ValidateMultipartFormDataBody} from '@foal/storage';
-import {Auth} from '../hooks';
+import {Auth, CorsHook} from '../hooks';
 
+@CorsHook()
 @Auth()
 export class ApiController {
 
@@ -56,6 +57,7 @@ export class ApiController {
     async getMe(ctx: Context) {
         return new HttpResponseOK(ctx.user)
     }
+
     @Get('/me/files')
     async getFiles(ctx: Context) {
         const data = await new UserService().getFiles(ctx.user._id);
