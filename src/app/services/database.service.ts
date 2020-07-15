@@ -11,7 +11,7 @@ export class Database {
     }
     onConnect() {
         const uri = Config.getOrThrow('mongodb.uri', 'string');
-        connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+        connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false });
         this.logger.info_init('Database connected!!!')
     }
     static init() {

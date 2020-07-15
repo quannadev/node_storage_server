@@ -4,16 +4,17 @@ import {
     Schema,
     Document
 } from 'mongoose';
-import {ICQ} from "../services";
+import {ICQ} from '../services';
+import {IUser} from './user.model';
 
 const fileUploadSchema: Schema = new Schema({
     fileId  : {
-        type: String,
+        type    : String,
         required: true,
-        unique: true
+        unique  : true
     },
     msgId   : {
-        type: String,
+        type    : String,
         required: true
     },
     fileName: {
@@ -27,6 +28,10 @@ const fileUploadSchema: Schema = new Schema({
     },
     url     : {
         type: String
+    },
+    owner   : {
+        type: Schema.Types.ObjectId,
+        ref : 'User'
     }
 }, {
     versionKey: false,
@@ -41,6 +46,7 @@ export interface IFileUpload extends Document {
     size: number;
     fileType: string;
     url: string;
+    owner: IUser;
 }
 
 export interface IFileInfo {
@@ -51,8 +57,8 @@ export interface IFileInfo {
 }
 
 fileUploadSchema.methods.getFileMetaData = async function getFileInfo() {
-    const fileInfo = await new ICQ().getFileInfo(this.fileId);
-    if (fileInfo){
+    const fileInfo = await new ICQ(this).getFileInfo(this.fileId);
+    if (fileInfo) {
         this.fileName = fileInfo.filename;
         this.size = fileInfo.size;
         this.fileType = fileInfo.type;

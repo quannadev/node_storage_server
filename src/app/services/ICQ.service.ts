@@ -5,6 +5,8 @@ import {
     IFileInfo
 } from '../models/file-upload.model';
 import {LoggerService} from './logger-service.service';
+import {IUser, User} from '../models/user.model';
+import {Utils} from '../models';
 
 export interface ICQTextResponse {
     msgId: string;
@@ -27,8 +29,10 @@ export class ICQ {
     private logger: LoggerService;
     private token: string = Config.get<string>('icq.token');
     private chatId: string = Config.get<string>('icq.chatId');
+    private user: IUser;
 
-    constructor() {
+    constructor(user: IUser) {
+        this.user = user;
         this.logger = new LoggerService();
         const uri = Config.get<string>('icq.uri');
         this.client = wretch(uri, {})
@@ -68,6 +72,7 @@ export class ICQ {
                 return null
             })
     }
+
     async uploadFile(files: Buffer[]) {
         for (const file of files) {
             this.client.url('/messages/sendFile').formData({
@@ -75,18 +80,27 @@ export class ICQ {
             }).post().badRequest(error => {
                 this.logger.error(`uploadFile badRequest: ${error.text}`);
             }).json(async data => {
-                const data_raw =  data as ICQFileResponse;
-                console.log(`Raw Data: ${JSON.stringify(data_raw)}`);
+                const data_raw = data as ICQFileResponse;
                 const fileUpload = await FileUpload.create({
                     fileId: data_raw.fileId,
-                    msgId: data_raw.msgId
+                    msgId : data_raw.msgId,
+                    owner : this.user
                 });
+                await User.findByIdAndUpdate(this.user._id, {
+                    $push: {files: fileUpload._id},
+                }, {new: true})
                 await fileUpload.getFileMetaData();
                 await fileUpload.save();
-                console.log(fileUpload);
+                await this.sendText(JSON.stringify({
+                    id    : fileUpload._id,
+                    fileId: fileUpload.fileId,
+                    owner : this.user.email
+                }))
+
             }).catch(error => {
                 this.logger.error(`uploadFile: ${error}`);
             })
+            await Utils.sleep(300);
         }
     }
 }

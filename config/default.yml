@@ -11,6 +11,11 @@ settings:
     driver: 'local'
     local:
       directory: 'uploaded'
+  jwt:
+    secret: W0vSaMhSjjeSAIvAgaueh3rhi5LY2avXHJTrJcovGVk=
+  multipartRequests:
+    fileSizeLimit: 4096000
+    fileNumberLimit: 10
 icq:
   uri: https://api.icq.net/bot/v1
   token: 001.4039253446.2905774098:754618342

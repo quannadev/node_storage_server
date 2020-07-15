@@ -5,13 +5,14 @@ import {
     HttpResponseOK,
     Post
 } from '@foal/core';
-import {ICQ} from '../services';
-import { ValidateMultipartFormDataBody } from '@foal/storage';
+import {ICQ, UserService} from '../services';
+import {ValidateMultipartFormDataBody} from '@foal/storage';
+import {Auth} from '../hooks';
+
+@Auth()
 export class ApiController {
-    private IcqService: ICQ;
 
     constructor() {
-        this.IcqService = new ICQ();
     }
 
     @Get('/')
@@ -23,7 +24,7 @@ export class ApiController {
     async sendText(ctx: Context) {
         const {text} = ctx.request.body;
         if (text) {
-            const res = await this.IcqService.sendText(text);
+            const res = await new ICQ(ctx.user).sendText(text);
             if (res) {
                 return new HttpResponseOK(res);
             }
@@ -33,17 +34,31 @@ export class ApiController {
             message: 'Missing data'
         })
     }
+
     @Post('/send_file')
     @ValidateMultipartFormDataBody({
         files: {
-            images: { required: false, multiple: true }
+            images: {
+                required: false,
+                multiple: true
+            }
         }
     })
     async sendFile(ctx: Context) {
         const images = ctx.request.body.files.images;
-        if (images){
-            const upload = await this.IcqService.uploadFile(images)
+        if (images) {
+            await new ICQ(ctx.user).uploadFile(images);
         }
         return new HttpResponseOK('OK')
+    }
+
+    @Get('/me')
+    async getMe(ctx: Context) {
+        return new HttpResponseOK(ctx.user)
+    }
+    @Get('/me/files')
+    async getFiles(ctx: Context) {
+        const data = await new UserService().getFiles(ctx.user._id);
+        return new HttpResponseOK(data)
     }
 }
