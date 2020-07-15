@@ -5,6 +5,7 @@
   "scripts": {
     "build:app": "foal rmdir build/app && copy-cli \"src/**/*.html\" build && tsc -p tsconfig.app.json",
     "build:app:w": "tsc -p tsconfig.app.json -w",
+    "build": "tsc -p tsconfig.app.json",
     "start": "node ./build/index.js",
     "start:w": "supervisor -w ./build --no-restart-on error ./build/index.js",
     "dev": "npm run build:app && concurrently \"npm run build:app:w\" \"npm run start:w\"",
