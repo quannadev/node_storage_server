@@ -36,7 +36,7 @@
     "form-data": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.4.9",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "source-map-support": "^0.5.1",
     "winston": "^3.3.3",
     "wretch": "^1.7.2",
